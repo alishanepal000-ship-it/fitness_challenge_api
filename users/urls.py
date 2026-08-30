@@ -4,13 +4,19 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import RegisterView, ProfileView
+from .views import RegisterView, ProfileView, register_page
 
 
 urlpatterns = [
+    #API endpoints
     path("register/", RegisterView.as_view(), name="register"),
     
     path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("profile/", ProfileView.as_view(), name="profile"),
+
+    #frontend page
+    path("register-page/", register_page, name="register_page"),
+
+
 ]
