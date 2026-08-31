@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block content %}
+
+<h2>My Profile</h2>
+
+<p id="username"></p>
+<p id="email"></p>
+<p id="message"></p>
+
+<script>
+    const accessToken = localStorage.getItem("access");
+
+    fetch("/api/auth/profile/", {
+        method: "GET",
+        headers: {
+            "Authorization": "Bearer " + accessToken
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("username").innerText =
+            "Username: " + data.username;
+
+        document.getElementById("email").innerText =
+            "Email: " + data.email;
+    })
+    .catch(error => {
+        document.getElementById("message").innerText =
+            "Could not load profile.";
+    });
+</script>
+
+{% endblock %}

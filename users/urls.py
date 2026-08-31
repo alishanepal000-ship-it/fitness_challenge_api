@@ -4,7 +4,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from .views import RegisterView, ProfileView, register_page
+from .views import RegisterView, ProfileView, register_page, login_page, profile_page
 
 
 urlpatterns = [
@@ -17,6 +17,8 @@ urlpatterns = [
 
     #frontend page
     path("register-page/", register_page, name="register_page"),
+    path("login-page/", login_page, name="login_page"),
+    path("profile-page/", profile_page, name="profile_page"),
 
 
 ]

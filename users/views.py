@@ -45,3 +45,9 @@ def register_page(request):
         })
 
     return render(request, "users/register.html")
+
+def login_page(request):
+    return render(request, "users/login.html")
+
+def profile_page(request):
+    return render(request, "users/profile.html")
