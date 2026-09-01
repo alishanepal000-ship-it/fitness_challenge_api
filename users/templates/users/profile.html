@@ -12,6 +12,8 @@ Profile
 <p id="email"></p>
 <p id="message"></p>
 
+<button id="logout-button">Logout</button>
+
 <script>
     const accessToken = localStorage.getItem("access");
 
@@ -33,6 +35,16 @@ Profile
         document.getElementById("message").innerText =
             "Could not load profile.";
     });
+    
+    const logoutButton = document.getElementById("logout-button");
+
+    logoutButton.addEventListener("click", function() {
+        localStorage.removeItem("access");
+        localStorage.removeItem("refresh");
+
+        window.location.href = "/login/";
+    });
+    
 </script>
 
 {% endblock %}

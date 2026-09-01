@@ -46,16 +46,15 @@ Login
 
         const data = await response.json();
 
-        if (response.ok) {
-            localStorage.setItem("access", data.access);
-            localStorage.setItem("refresh", data.refresh);
+    if (response.ok) {
+        localStorage.setItem("access", data.access);
+        localStorage.setItem("refresh", data.refresh);
 
-            document.getElementById("message").innerText =
-                "Login successful!";
-        } else {
-            document.getElementById("message").innerText =
-                "Invalid username or password.";
-        }
+        window.location.href = "/profile/";
+    } else {
+        document.getElementById("message").innerText =
+            "Invalid username or password.";
+    }
     });
 </script>
 
