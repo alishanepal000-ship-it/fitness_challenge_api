@@ -17,25 +17,75 @@ Profile
 <script>
     const accessToken = localStorage.getItem("access");
 
-    fetch("/api/auth/profile/", {
-        method: "GET",
-        headers: {
-            "Authorization": "Bearer " + accessToken
+    if (!accessToken) {
+        window.location.href = "/login/";
+    }
+
+    async function loadProfile() {
+        let token = localStorage.getItem("access");
+
+        let response = await fetch("/api/auth/profile/", {
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            }
+        });
+
+        if (response.status === 401) {
+            const refreshToken = localStorage.getItem("refresh");
+
+            if (!refreshToken) {
+                window.location.href = "/login/";
+                return;
+            }
+
+            const refreshResponse = await fetch("/api/auth/token/refresh/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    refresh: refreshToken
+                })
+            });
+
+            if (!refreshResponse.ok) {
+                localStorage.removeItem("access");
+                localStorage.removeItem("refresh");
+
+                window.location.href = "/login/";
+                return;
+            }
+
+            const refreshData = await refreshResponse.json();
+
+            localStorage.setItem("access", refreshData.access);
+
+            response = await fetch("/api/auth/profile/", {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + refreshData.access
+                }
+            });
         }
-    })
-    .then(response => response.json())
-    .then(data => {
+
+        if (!response.ok) {
+            document.getElementById("message").innerText =
+                "Could not load profile.";
+            return;
+        }
+
+        const data = await response.json();
+
         document.getElementById("username").innerText =
             "Username: " + data.username;
 
         document.getElementById("email").innerText =
             "Email: " + data.email;
-    })
-    .catch(error => {
-        document.getElementById("message").innerText =
-            "Could not load profile.";
-    });
-    
+    }
+
+    loadProfile();
+
     const logoutButton = document.getElementById("logout-button");
 
     logoutButton.addEventListener("click", function() {
@@ -44,7 +94,6 @@ Profile
 
         window.location.href = "/login/";
     });
-    
 </script>
 
 {% endblock %}
