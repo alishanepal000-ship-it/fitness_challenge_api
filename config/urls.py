@@ -23,7 +23,9 @@ urlpatterns = [
 
     # API
     path("api/auth/", include("users.urls")),
+    path("api/challenges/", include("challenges.urls")),
 
     # Frontend
+    
     path("", include("users.web_urls")),
 ]
